@@ -1,0 +1,51 @@
+{
+  "id": "W3-S1",
+  "title": "Intermittent East-West Packet Loss",
+  "weekTag": "Week 3",
+  "summary": "Application tier nodes in separate VLANs lose connectivity in short bursts.",
+  "timeEstimateMinutes": 50,
+  "context": "After a firewall policy refresh, microservices between app and data tiers experience retries and occasional timeout storms.",
+  "artifacts": [
+    {
+      "id": "PING-APP-DATA",
+      "label": "Ping between app-01 and db-01",
+      "tab": "Ping",
+      "format": "text",
+      "content": "PING 10.40.20.11 56(84) bytes of data.\n64 bytes from 10.40.20.11: icmp_seq=1 ttl=63 time=2.5 ms\n64 bytes from 10.40.20.11: icmp_seq=2 ttl=63 time=2.6 ms\nRequest timeout for icmp_seq 3\n64 bytes from 10.40.20.11: icmp_seq=4 ttl=63 time=44.7 ms\n64 bytes from 10.40.20.11: icmp_seq=5 ttl=63 time=2.7 ms"
+    },
+    {
+      "id": "TRACEROUTE-HQ01",
+      "label": "Traceroute app-01 to db-01",
+      "tab": "Traceroute",
+      "format": "text",
+      "content": "traceroute to 10.40.20.11, 30 hops max\n1  10.40.10.1  0.8 ms  0.7 ms  0.9 ms\n2  10.40.254.14  1.2 ms  1.4 ms  1.1 ms\n3  10.40.254.22  19.8 ms  28.1 ms  21.9 ms\n4  10.40.20.11  3.0 ms  2.8 ms  2.9 ms"
+    },
+    {
+      "id": "FW-ALLOW-DENY",
+      "label": "Firewall event log",
+      "tab": "Firewall logs",
+      "format": "table",
+      "columns": ["row_id", "timestamp", "src", "dst", "port", "action", "policy"],
+      "rows": [
+        { "row_id": "f1", "timestamp": "14:03:11", "src": "10.40.10.55", "dst": "10.40.20.11", "port": 5432, "action": "ALLOW", "policy": "APP-TO-DB" },
+        { "row_id": "f2", "timestamp": "14:03:16", "src": "10.40.10.55", "dst": "10.40.20.11", "port": 5432, "action": "DENY", "policy": "TEMP-CATCHALL" },
+        { "row_id": "f3", "timestamp": "14:03:22", "src": "10.40.10.55", "dst": "10.40.20.11", "port": 5432, "action": "ALLOW", "policy": "APP-TO-DB" }
+      ]
+    },
+    {
+      "id": "FLOW-LOSS",
+      "label": "Packet loss sample",
+      "tab": "Flow summary",
+      "format": "timeseries",
+      "metric": "Loss (%)",
+      "summary": "Loss remains near 0% except for a short burst around 14:03 that aligns with policy changes.",
+      "points": [
+        { "row_id": "l1", "timestamp": "14:01", "value": 0 },
+        { "row_id": "l2", "timestamp": "14:02", "value": 0.5 },
+        { "row_id": "l3", "timestamp": "14:03", "value": 12 },
+        { "row_id": "l4", "timestamp": "14:04", "value": 1.1 },
+        { "row_id": "l5", "timestamp": "14:05", "value": 0 }
+      ]
+    }
+  ]
+}
