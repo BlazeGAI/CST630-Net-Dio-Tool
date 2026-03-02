@@ -2,60 +2,29 @@
   "id": "W2-S1",
   "title": "Intermittent Connectivity in Segmented Network",
   "weekTag": "Week 2",
+  "summary": "Users in the Operations VLAN intermittently lose access to a cloud portal. DNS lookups sometimes fail during peak usage windows.",
   "timeEstimateMinutes": 20,
-  "context": {
-    "environment": "200-user enterprise with Admin, Operations, IT, and Guest VLANs. Cloud-hosted portal.",
-    "symptoms": [
-      "Users in the Operations VLAN report intermittent inability to access the cloud portal.",
-      "Some DNS queries appear to fail during peak hours."
-    ]
-  },
-  "teachingNotes": {
-    "interpretationTips": [
-      "Separate addressing issues from DNS resolution failures.",
-      "Look for differences between VLAN behavior."
-    ],
-    "commonMisconceptions": [
-      "Assuming DNS failure always indicates external outage.",
-      "Confusing packet loss with application-layer failure."
-    ]
-  },
+  "context": "200-user enterprise with Admin, Operations, IT, and Guest VLANs. A cloud-hosted portal is accessed over the internet through an edge firewall.",
   "artifacts": [
     {
-      "type": "ping",
       "id": "PING-OPS01",
       "label": "Ping from OPS-01 to Cloud Portal",
+      "tab": "Ping",
       "format": "timeseries",
-      "explanation": "ICMP RTT and packet loss from Operations VLAN host to cloud portal endpoint.",
-      "interpretationTips": [
-        "Note whether packet loss is sustained or intermittent.",
-        "Compare RTT stability before and during loss."
-      ],
-      "content": [
-        "2026-03-02 09:00 RTT=24ms loss=0%",
-        "2026-03-02 09:05 RTT=27ms loss=0%",
-        "2026-03-02 09:10 RTT=110ms loss=15%"
-      ],
-      "data": [
-        {"row_id":"t-0900","t":"2026-03-02T09:00:00","rtt_ms":24,"loss_pct":0},
-        {"row_id":"t-0905","t":"2026-03-02T09:05:00","rtt_ms":27,"loss_pct":0},
-        {"row_id":"t-0910","t":"2026-03-02T09:10:00","rtt_ms":110,"loss_pct":15}
+      "summary": "RTT is stable early, then degrades with intermittent loss beginning around 09:10.",
+      "metric": "rtt_ms",
+      "points": [
+        { "row_id": "t-0900", "timestamp": "2026-03-02T09:00:00", "value": 24 },
+        { "row_id": "t-0905", "timestamp": "2026-03-02T09:05:00", "value": 27 },
+        { "row_id": "t-0910", "timestamp": "2026-03-02T09:10:00", "value": 110 }
       ]
     },
     {
-      "type": "firewall_logs",
       "id": "FW-EDGE",
       "label": "Edge Firewall Log Excerpts",
+      "tab": "Firewall logs",
       "format": "text",
-      "explanation": "Selected firewall entries from the edge device.",
-      "interpretationTips": [
-        "Examine destination ports and VLAN source addresses."
-      ],
-      "content": [
-        "09:09:58 ALLOW TCP 10.2.10.14 -> 52.18.44.10:443",
-        "09:10:02 DENY UDP 10.2.10.14 -> 8.8.8.8:53",
-        "09:10:03 ALLOW TCP 10.2.10.14 -> 52.18.44.10:443"
-      ]
+      "content": "09:09:58 ALLOW TCP 10.2.10.14 -> 52.18.44.10:443\n09:10:02 DENY UDP 10.2.10.14 -> 8.8.8.8:53\n09:10:03 ALLOW TCP 10.2.10.14 -> 52.18.44.10:443"
     }
   ]
 }
