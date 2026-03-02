@@ -2,14 +2,9 @@
   "id": "W2-S1",
   "title": "Intermittent Connectivity in Segmented Network",
   "weekTag": "Week 2",
+  "summary": "Investigate intermittent cloud portal access and DNS query failures reported by users in the Operations VLAN.",
   "timeEstimateMinutes": 20,
-  "context": {
-    "environment": "200-user enterprise with Admin, Operations, IT, and Guest VLANs. Cloud-hosted portal.",
-    "symptoms": [
-      "Users in the Operations VLAN report intermittent inability to access the cloud portal.",
-      "Some DNS queries appear to fail during peak hours."
-    ]
-  },
+  "context": "200-user enterprise with Admin, Operations, IT, and Guest VLANs. Cloud-hosted portal. Users in the Operations VLAN report intermittent inability to access the cloud portal, and some DNS queries appear to fail during peak hours.",
   "teachingNotes": {
     "interpretationTips": [
       "Separate addressing issues from DNS resolution failures.",
