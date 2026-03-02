@@ -1,0 +1,70 @@
+{
+  "id": "W3-S1",
+  "title": "Latency Escalation Across Multi-Site Enterprise",
+  "weekTag": "Week 3",
+  "timeEstimateMinutes": 25,
+  "context": {
+    "environment": "Headquarters, Branch-1, Branch-2, and cloud application connected via encrypted tunnels.",
+    "symptoms": [
+      "Users report high latency to the cloud application during business hours.",
+      "Branch-2 reports occasional packet loss."
+    ]
+  },
+  "teachingNotes": {
+    "interpretationTips": [
+      "Differentiate congestion from routing convergence behavior.",
+      "Correlate packet loss with RTT spikes."
+    ],
+    "commonMisconceptions": [
+      "Assuming encryption overhead is always the cause of latency.",
+      "Interpreting a single traceroute as definitive proof of root cause."
+    ]
+  },
+  "artifacts": [
+    {
+      "type": "ping",
+      "id": "PING-BR2",
+      "label": "Ping from Branch-2 to Cloud Application",
+      "format": "timeseries",
+      "explanation": "ICMP RTT and packet loss from Branch-2 to cloud app.",
+      "interpretationTips": [
+        "Observe whether latency increases correlate with packet loss."
+      ],
+      "content": [
+        "2026-03-03 13:00 RTT=28ms loss=0%",
+        "2026-03-03 13:05 RTT=92ms loss=8%",
+        "2026-03-03 13:10 RTT=105ms loss=12%"
+      ],
+      "data": [
+        {"row_id":"t-1300","t":"2026-03-03T13:00:00","rtt_ms":28,"loss_pct":0},
+        {"row_id":"t-1305","t":"2026-03-03T13:05:00","rtt_ms":92,"loss_pct":8},
+        {"row_id":"t-1310","t":"2026-03-03T13:10:00","rtt_ms":105,"loss_pct":12}
+      ]
+    },
+    {
+      "type": "flow_summary",
+      "id": "FLOW-BR2",
+      "label": "Branch-2 NetFlow Summary (Top Talkers)",
+      "format": "table",
+      "explanation": "Top traffic flows observed at Branch-2 edge.",
+      "interpretationTips": [
+        "Look for unusual traffic concentration by port or destination."
+      ],
+      "columns": [
+        {"key":"row_id","label":"Row ID"},
+        {"key":"src","label":"Source IP"},
+        {"key":"dst","label":"Destination IP"},
+        {"key":"port","label":"Port"},
+        {"key":"bytes","label":"Bytes"}
+      ],
+      "data": [
+        {"row_id":"talker-01","src":"10.3.20.45","dst":"52.18.44.10","port":443,"bytes":8200000},
+        {"row_id":"talker-02","src":"10.3.20.88","dst":"203.0.113.12","port":445,"bytes":5600000}
+      ],
+      "content": [
+        "10.3.20.45 -> 52.18.44.10:443 8.2MB",
+        "10.3.20.88 -> 203.0.113.12:445 5.6MB"
+      ]
+    }
+  ]
+}
