@@ -1,0 +1,52 @@
+{
+  "id": "W2-S1",
+  "title": "Remote Office Latency and DNS Drift",
+  "weekTag": "Week 2",
+  "summary": "Users in branch office report slow SaaS access and intermittent name resolution failures.",
+  "timeEstimateMinutes": 45,
+  "context": "A branch office moved to a new ISP circuit. Soon after cutover, users report application slowness, especially during morning sync windows.",
+  "artifacts": [
+    {
+      "id": "PING-BRANCH-GW",
+      "label": "Ping to default gateway",
+      "tab": "Ping",
+      "format": "text",
+      "content": "PING 10.10.5.1 56(84) bytes of data.\n64 bytes from 10.10.5.1: icmp_seq=1 ttl=64 time=1.2 ms\n64 bytes from 10.10.5.1: icmp_seq=2 ttl=64 time=1.4 ms\n64 bytes from 10.10.5.1: icmp_seq=3 ttl=64 time=1.1 ms\n--- 10.10.5.1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss"
+    },
+    {
+      "id": "TRACEROUTE-SAAS",
+      "label": "Traceroute to SaaS endpoint",
+      "tab": "Traceroute",
+      "format": "text",
+      "content": "traceroute to app.vendor.example (198.51.100.50), 30 hops max\n1  10.10.5.1  1.2 ms  1.1 ms  1.3 ms\n2  172.16.24.1  8.9 ms  9.2 ms  8.7 ms\n3  203.0.113.5  88.1 ms  95.4 ms  92.7 ms\n4  203.0.113.18  101.2 ms  98.2 ms  100.3 ms\n5  198.51.100.50  104.5 ms  103.9 ms  104.1 ms"
+    },
+    {
+      "id": "DNS-QUERY-LOG",
+      "label": "Resolver query log excerpt",
+      "tab": "DNS logs",
+      "format": "table",
+      "columns": ["row_id", "timestamp", "client", "query", "rcode", "resolver"],
+      "rows": [
+        { "row_id": "r1", "timestamp": "09:00:05", "client": "10.10.5.24", "query": "app.vendor.example", "rcode": "SERVFAIL", "resolver": "10.10.5.53" },
+        { "row_id": "r2", "timestamp": "09:00:06", "client": "10.10.5.24", "query": "app.vendor.example", "rcode": "NOERROR", "resolver": "1.1.1.1" },
+        { "row_id": "r3", "timestamp": "09:01:14", "client": "10.10.5.31", "query": "api.vendor.example", "rcode": "SERVFAIL", "resolver": "10.10.5.53" }
+      ]
+    },
+    {
+      "id": "FLOW-RTT",
+      "label": "WAN RTT time series",
+      "tab": "Flow summary",
+      "format": "timeseries",
+      "metric": "RTT (ms)",
+      "summary": "RTT is stable near 25ms until 09:10, then rises above 90ms during backup traffic before partially recovering.",
+      "points": [
+        { "row_id": "t1", "timestamp": "09:00", "value": 24 },
+        { "row_id": "t2", "timestamp": "09:05", "value": 26 },
+        { "row_id": "t3", "timestamp": "09:10", "value": 31 },
+        { "row_id": "t4", "timestamp": "09:15", "value": 92 },
+        { "row_id": "t5", "timestamp": "09:20", "value": 107 },
+        { "row_id": "t6", "timestamp": "09:25", "value": 73 }
+      ]
+    }
+  ]
+}

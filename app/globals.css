@@ -1,0 +1,95 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: #10212b;
+  background: #f4f7f9;
+}
+
+a { color: #0b5394; }
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #d5dde3;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 0 0 1rem;
+}
+
+button, select, textarea {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #2a5d84;
+  background: #0b5394;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role='tab']:focus-visible {
+  outline: 3px solid #f39c12;
+  outline-offset: 2px;
+}
+
+button.secondary {
+  background: #f6f8fa;
+  color: #1b2f3b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccd8e1;
+  text-align: left;
+  padding: 0.45rem;
+}
+
+.tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 2px solid #ccd8e1;
+  padding-bottom: 0.5rem;
+}
+
+[role='tab'] {
+  background: #f0f4f8;
+  color: #163042;
+}
+
+[role='tab'][aria-selected='true'] {
+  background: #0b5394;
+  color: #fff;
+}
+
+.panel {
+  padding-top: 1rem;
+}
+
+pre {
+  overflow-x: auto;
+  background: #f8fafc;
+  border: 1px solid #d5dde3;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
